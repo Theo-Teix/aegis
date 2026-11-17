@@ -55,8 +55,6 @@ h1,h2{font-weight:850;font-stretch:118%;line-height:.98;letter-spacing:-.025em;t
 .palco{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;
   background:radial-gradient(70% 46% at 50% 84%,rgba(255,222,0,.17),transparent 70%),radial-gradient(90% 60% at 50% 100%,#1B4A20 0%,transparent 70%),linear-gradient(#040A06 0%,#0B1A0E 55%,#102A15 100%)}
 .palco canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.letreiro{position:absolute;inset:11vh 0 auto 0;text-align:center;font-weight:900;font-stretch:125%;font-size:clamp(5.2rem,23vw,21rem);line-height:.8;letter-spacing:-.03em;color:transparent;-webkit-text-stroke:2px rgba(168,216,143,.85);user-select:none;will-change:opacity,transform}
-.letreiro b{font-weight:900;color:rgba(168,216,143,.2)}
 .etiquetas{position:absolute;inset:0;pointer-events:none}
 .etq{position:absolute;left:0;top:0;white-space:nowrap;font-size:.86rem;font-weight:650;padding:5px 12px 5px 10px;border-radius:99px;background:rgba(6,14,8,.78);border:1px solid rgba(168,216,143,.5);color:#fff;opacity:0;will-change:transform,opacity;backdrop-filter:blur(6px)}
 .etq::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--amarelo);margin-right:8px;vertical-align:1px}
@@ -274,7 +272,6 @@ footer b{color:#E6EEE3;font-weight:600}
 <div class="historia" id="historia">
   <div class="palco" aria-hidden="true">
     <div class="fundo-fim" id="fundo-fim"></div>
-    <div class="letreiro" id="letreiro"><b>AEGIS</b></div>
     <canvas id="cena"></canvas>
     <div class="etiquetas" id="etiquetas"></div>
   </div>
@@ -700,7 +697,7 @@ contar(false);
 
 /* ---------- progresso da rolagem ---------- */
 var trilha = document.getElementById('trilha'), itens = [].slice.call(trilha.children);
-var letreiro = document.getElementById('letreiro'), fundoFim = document.getElementById('fundo-fim');
+var fundoFim = document.getElementById('fundo-fim');
 var q = 0, local = 0, atual = 0, sprint = 0, dentro = true;
 function suave(t){ t = Math.max(0, Math.min(1, t)); return t * t * (3 - 2 * t); }
 function ler(){
@@ -717,9 +714,7 @@ function ler(){
   var fim = caps[NC - 1].getBoundingClientRect();
   dentro = fim.bottom > vh * 0.4;
   pontos.classList.toggle('fora', !dentro);
-  var f = Math.max(0, 1 - q * 1.6);
   fundoFim.style.opacity = Math.max(0, q - (NC - 2)).toFixed(3);
-  letreiro.style.opacity = f; letreiro.style.transform = 'translateY(' + (-q * 60) + 'px) scale(' + (1 + q * 0.12) + ')';
 }
 window.addEventListener('scroll', ler, { passive: true });
 window.addEventListener('resize', ler);
@@ -1399,7 +1394,7 @@ function quadro(agora){
   // o mundo em volta
   uni.uT.value = t;
   var some = Math.max(0, Math.min(1, qS - (NC - 2)));
-  X.terreno.material.uniforms.uA.value = (1 - some * 0.92) * (0.22 + 0.78 * suave(qS / 0.7)); X.arvores.material.opacity = 1 - some; X.arvores.visible = some < 0.98; X.sol.material.opacity = 0.85 * (1 - some);
+  X.terreno.material.uniforms.uA.value = 1 - some * 0.92; X.arvores.material.opacity = 1 - some; X.arvores.visible = some < 0.98; X.sol.material.opacity = 0.85 * (1 - some);
   X.cata.rotation.y = -t * (2.4 + E.chuva * 6); X.biruta.rotation.y = Math.sin(t * 0.5) * 0.5 + E.chuva * 0.8;
   X.leds.forEach(function(l, n){ l.material.opacity = Math.sin(t * 3 + n * 1.3) > 0.5 ? 1 : 0.2; });
   var ap = X.geoPulso.attributes.position.array;
